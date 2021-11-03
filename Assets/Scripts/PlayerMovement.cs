@@ -19,8 +19,13 @@ public class PlayerMovement : MonoBehaviour {
     public bool isGrounded;
     private Vector3 velocity = Vector3.zero;
 
+    private Animator animator;
+    private SpriteRenderer spriteRenderer;
+
     void Start() {
         rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
         isGrounded = true;
     }
 
@@ -30,19 +35,39 @@ public class PlayerMovement : MonoBehaviour {
 
     void Update() {
         float xDisplacement = Input.GetAxis("Horizontal");
+        float actualSpeed = speed;
 
-        float speedModifier = speed;
-
-        if (Input.GetKey(KeyCode.LeftShift)) {
-            speedModifier = sprintingSpeed;
+        if (xDisplacement > 0) {
+            spriteRenderer.flipX = false;
+        } else if (xDisplacement < 0) {
+            spriteRenderer.flipX = true;
         }
 
-        Vector3 targetVelocity = new Vector2(xDisplacement * 100f * speedModifier * Time.deltaTime, rb.velocity.y);
-        
+        if (Input.GetKey(KeyCode.LeftShift)) {
+            actualSpeed = sprintingSpeed;
+        }
+
+        Vector3 targetVelocity = new Vector2(xDisplacement * actualSpeed, rb.velocity.y);
+
         rb.velocity = Vector3.SmoothDamp(rb.velocity, targetVelocity, ref velocity, movementSmoothing);
+        animator.SetFloat("xSpeed", Mathf.Abs(rb.velocity.x));
+        animator.SetFloat("ySpeed", rb.velocity.y);
+        Debug.Log(Mathf.Abs(rb.velocity.x));
 
         if (Input.GetButtonDown("Jump") && isGrounded) {
             rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
+        }
+
+        if (Input.GetKeyDown(KeyCode.F)) {
+            animator.SetTrigger("Attack");
+        }
+
+        if (Input.GetKeyDown(KeyCode.K)) {
+            animator.SetBool("Dead", true);
+        }
+
+        if (Input.GetKeyDown(KeyCode.L)) {
+            animator.SetTrigger("TakeHit");
         }
 
         if (Input.GetKeyDown(KeyCode.C)) {
