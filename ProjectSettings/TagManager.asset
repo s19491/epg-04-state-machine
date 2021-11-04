@@ -7,6 +7,7 @@ TagManager:
   - Ground
   - MovingGround
   - BouncingGround
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -17,7 +18,7 @@ TagManager:
   - 
   - 
   - Platform
-  - 
+  - Enemy
   - 
   - 
   - 

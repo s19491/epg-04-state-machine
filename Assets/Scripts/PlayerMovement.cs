@@ -14,7 +14,11 @@ public class PlayerMovement : MonoBehaviour {
     public int dashForce;
 
     public Transform groundCheck;
+    public Transform hitCheck;
+
     public float groundCheckRadius;
+    public float hitCheckRadius;
+
     private Rigidbody2D rb;
     public bool isGrounded;
     private Vector3 velocity = Vector3.zero;
@@ -39,8 +43,10 @@ public class PlayerMovement : MonoBehaviour {
 
         if (xDisplacement > 0) {
             spriteRenderer.flipX = false;
+            hitCheck.localPosition = new Vector2(Mathf.Abs(hitCheck.localPosition.x), hitCheck.localPosition.y);
         } else if (xDisplacement < 0) {
             spriteRenderer.flipX = true;
+            hitCheck.localPosition = new Vector2(-Mathf.Abs(hitCheck.localPosition.x), hitCheck.localPosition.y);
         }
 
         if (Input.GetKey(KeyCode.LeftShift)) {
@@ -52,7 +58,6 @@ public class PlayerMovement : MonoBehaviour {
         rb.velocity = Vector3.SmoothDamp(rb.velocity, targetVelocity, ref velocity, movementSmoothing);
         animator.SetFloat("xSpeed", Mathf.Abs(rb.velocity.x));
         animator.SetFloat("ySpeed", rb.velocity.y);
-        Debug.Log(Mathf.Abs(rb.velocity.x));
 
         if (Input.GetButtonDown("Jump") && isGrounded) {
             rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
@@ -60,6 +65,7 @@ public class PlayerMovement : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.F)) {
             animator.SetTrigger("Attack");
+            checkHit();
         }
 
         if (Input.GetKeyDown(KeyCode.K)) {
@@ -95,7 +101,18 @@ public class PlayerMovement : MonoBehaviour {
                 isGrounded = true;
             }
         }
+    }
 
+    private void checkHit() {
+        LayerMask layerMask = LayerMask.GetMask("Enemy");
+
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(hitCheck.position, hitCheckRadius, layerMask);
+        for (int i = 0; i < colliders.Length; i++) {
+            if (colliders[i].gameObject != gameObject) {
+                colliders[i].GetComponent<EnemyScript>().TakeHit();
+                Debug.Log("Hit");
+            }
+        }
     }
 
     public void Push(Vector2 vector) {
