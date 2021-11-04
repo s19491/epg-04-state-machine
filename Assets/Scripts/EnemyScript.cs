@@ -7,6 +7,10 @@ public class EnemyScript : MonoBehaviour {
     private Animator animator;
     private SpriteRenderer spriteRenderer;
 
+    public float speed;
+    public float chaseDistance = 8f;
+    public float attackDistance = 2f;
+
     private int lives = 3;
 
     void Start() {
@@ -16,7 +20,11 @@ public class EnemyScript : MonoBehaviour {
     }
 
     void Update() {
-        
+        if (rb.velocity.x > 0) {
+            spriteRenderer.flipX = false;
+        } else if (rb.velocity.x < 0) {
+            spriteRenderer.flipX = true;
+        }
     }
 
     public void TakeHit() {
