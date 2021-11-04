@@ -24,6 +24,7 @@ public class EnemyChasingBehaviour : StateMachineBehaviour
                 if (Time.time - enemy.timeSinceLastAttack > enemy.attackSpeed) {
                     animator.SetTrigger("Attack");
                     enemy.timeSinceLastAttack = Time.time;
+                    rigidbody.velocity = new Vector2(0, rigidbody.velocity.y);
                 }
             } else if (distanceToPlayer < enemy.chaseDistance) {
                 Vector2 difference = (player.transform.position - enemy.transform.position).normalized;

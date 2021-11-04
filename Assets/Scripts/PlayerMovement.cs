@@ -113,7 +113,6 @@ public class PlayerMovement : MonoBehaviour {
         for (int i = 0; i < colliders.Length; i++) {
             if (colliders[i].gameObject != gameObject) {
                 colliders[i].GetComponent<EnemyScript>().TakeHit();
-                Debug.Log("Hit");
             }
         }
     }

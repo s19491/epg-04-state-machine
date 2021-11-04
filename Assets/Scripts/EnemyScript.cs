@@ -15,7 +15,7 @@ public class EnemyScript : MonoBehaviour {
     public Transform hitCheck;
     public float hitCheckRadius;
 
-    private int lives = 3;
+    public int lives = 3;
 
     public float timeSinceLastAttack = 0;
 
@@ -36,7 +36,6 @@ public class EnemyScript : MonoBehaviour {
     }
 
     public void TakeHit() {
-        Debug.Log("Taking Hit");
         animator.SetTrigger("TakeHit");
 
         lives--;

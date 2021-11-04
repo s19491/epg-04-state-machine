@@ -24,7 +24,6 @@ public class EnemyAttackBehaviour : StateMachineBehaviour
         for (int i = 0; i < colliders.Length; i++) {
             if (colliders[i].gameObject != enemy.gameObject && colliders[i].tag == "Player") {
                 colliders[i].GetComponent<PlayerMovement>().TakeHit();
-                Debug.Log("Enemy hits player");
                 return;
             }
         }
