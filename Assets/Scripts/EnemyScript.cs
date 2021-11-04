@@ -10,8 +10,14 @@ public class EnemyScript : MonoBehaviour {
     public float speed;
     public float chaseDistance = 8f;
     public float attackDistance = 2f;
+    public float attackSpeed;
+
+    public Transform hitCheck;
+    public float hitCheckRadius;
 
     private int lives = 3;
+
+    public float timeSinceLastAttack = 0;
 
     void Start() {
         rb = GetComponent<Rigidbody2D>();
@@ -22,8 +28,10 @@ public class EnemyScript : MonoBehaviour {
     void Update() {
         if (rb.velocity.x > 0) {
             spriteRenderer.flipX = false;
+            hitCheck.localPosition = new Vector2(Mathf.Abs(hitCheck.localPosition.x), hitCheck.localPosition.y);
         } else if (rb.velocity.x < 0) {
             spriteRenderer.flipX = true;
+            hitCheck.localPosition = new Vector2(-Mathf.Abs(hitCheck.localPosition.x), hitCheck.localPosition.y);
         }
     }
 

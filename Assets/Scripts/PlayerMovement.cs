@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour {
 
+    public int health;
     public int speed;
     public int sprintingSpeed;
 
@@ -88,6 +89,8 @@ public class PlayerMovement : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.R)) {
             SceneManager.LoadScene("Main");
         }
+
+        UIManager.Instance.SetHealthText(health);
     }
 
     private void checkGrounded() {
@@ -117,5 +120,17 @@ public class PlayerMovement : MonoBehaviour {
 
     public void Push(Vector2 vector) {
         rb.AddForce(vector, ForceMode2D.Impulse);
+    }
+
+    public void TakeHit() {
+        if (health > 0) {
+            health--;
+            UIManager.Instance.SetHealthText(health);
+            
+            if (health == 0) {
+                animator.SetTrigger("Dead");
+                GameEventSystem.Instance.SetPlayerLose(true);
+            }
+        }
     }
 }

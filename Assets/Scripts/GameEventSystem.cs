@@ -27,6 +27,7 @@ public class GameEventSystem : MonoBehaviour
 
     public event Action<bool> OnPlayerInDangerZone;
     public event Action<bool> OnPlayerWin;
+    public event Action<bool> OnPlayerLose;
 
     public void SetPlayerInDangerZone(bool isInDangerZone)
     {
@@ -35,5 +36,9 @@ public class GameEventSystem : MonoBehaviour
 
     public void SetPlayerWin(bool playerWin) {
         OnPlayerWin.Invoke(playerWin);
+    }
+
+    public void SetPlayerLose(bool playerLose) {
+        OnPlayerLose.Invoke(playerLose);
     }
 }
